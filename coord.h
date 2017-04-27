@@ -27,9 +27,9 @@
 
 enum{ Xcoord=0, Ycoord, Zcoord};
       
-DEF double pos[Ndim][Nbody], vel[Ndim][Nbody];
-DEF double f[Ndim][Nbody], visc[Nbody], mass[Nbody], radius[Nbody];
-DEF double delta_pos[Ndim][Npair];
+DEF double pos[Nbody][Ndim], vel[Nbody][Ndim];
+DEF double f[Nbody][Ndim], visc[Nbody], mass[Nbody], radius[Nbody];
+DEF double delta_pos[Npair][Ndim];
 DEF double r[Nbody];
 
 DEF double delta_r[Npair];
