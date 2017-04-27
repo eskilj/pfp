@@ -34,6 +34,7 @@ void wind_force(int N, double *f, double *visc, double vel);
 void evolve(int count, double dt) {
     int step;
     int i, j, k, l;
+    double inner_mass, outer_mass, temp_force;
     /*
      * Loop over timesteps.
      */
@@ -93,24 +94,18 @@ void evolve(int count, double dt) {
          */
         k = 0;
         for (i = 0; i < Nbody; i++) {
+            outer_mass = G*mass[i];
             for (j = i + 1; j < Nbody; j++) {
-
+                inner_mass = outer_mass * mass[j];
                 for (l = 0; l < Ndim; l++) {
                     /*  flip force if close in */
+                    temp_force = force(inner_mass, delta_pos[l][k], delta_r[k]);
                     if (delta_r[k] >= size) {
-                        f[l][i] = f[l][i] -
-                                  force(G * mass[i] * mass[j], delta_pos[l][k],
-                                        delta_r[k]);
-                        f[l][j] = f[l][j] +
-                                  force(G * mass[i] * mass[j], delta_pos[l][k],
-                                        delta_r[k]);
+                        f[l][i] = f[l][i] - temp_force;
+                        f[l][j] = f[l][j] + temp_force;
                     } else {
-                        f[l][i] = f[l][i] +
-                                  force(G * mass[i] * mass[j], delta_pos[l][k],
-                                        delta_r[k]);
-                        f[l][j] = f[l][j] -
-                                  force(G * mass[i] * mass[j], delta_pos[l][k],
-                                        delta_r[k]);
+                        f[l][i] = f[l][i] + temp_force;
+                        f[l][j] = f[l][j] - temp_force;
                         collisions++;
                     }
                 }
