@@ -12,6 +12,6 @@ output.dat: MD input.dat
 	./MD
 
 clean:
-	rm -f MD $(OBJ)
+	rm -f MD $(OBJ) output.dat* bench_c.e*
 
 $(OBJ) : coord.h Makefile

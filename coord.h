@@ -19,10 +19,13 @@
 #else
 #define DEF extern
 #endif
-#define Nbody 4*1024
-#define  Npair ((Nbody*(Nbody-1))/2)
+#define Nbody 4096
+#define Ndim 3
+#define Npair ((Nbody*(Nbody-1))/2)
+#define G 2.0
+#define M_central 1000.0
 
-enum{ Xcoord=0, Ycoord, Zcoord, Ndim };
+enum{ Xcoord=0, Ycoord, Zcoord};
       
 DEF double *pos[Ndim], *vel[Ndim];
 DEF double *f[Ndim], *visc, *mass, *radius;
@@ -31,8 +34,5 @@ DEF double *r;
 DEF double *delta_r;
 DEF double wind[Ndim];
 DEF int collisions;
-
-#define G 2.0
-#define M_central 1000.0
 
 void evolve(int Nstep, double dt);

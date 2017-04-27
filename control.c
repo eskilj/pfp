@@ -11,6 +11,10 @@
 #define DECL
 #include "coord.h"
 
+#define Nstep 100
+#define Nsave 5
+#define dt 0.02
+
 double second(void); 
 int main(int argc, char *argv[]){
   int i,j;
@@ -18,16 +22,7 @@ int main(int argc, char *argv[]){
   double tstart,tstop;
   double start,stop;
   char name[80];
-  /*  timestep value */
-  double dt=0.02;
 
-  /*  number of timesteps to use. */
-  int Nstep=100;
-  int Nsave=5;
-  
-  if( argc > 1 ){
-    Nstep=atoi(argv[1]);
-  }
   wind[Xcoord] = 0.9;
   wind[Ycoord] = 0.4;
   wind[Zcoord] = 0.0;
@@ -102,12 +97,6 @@ int main(int argc, char *argv[]){
 
 double second()
 {
-/* struct timeval { long        tv_sec; 
-            long        tv_usec;        };
-
-struct timezone { int   tz_minuteswest;
-             int        tz_dsttime;      };     */
-
         struct timeval tp;
         struct timezone tzp;
         int i;

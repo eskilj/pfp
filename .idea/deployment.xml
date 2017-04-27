@@ -7,6 +7,10 @@
           <mappings>
             <mapping deploy="/pfp" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/initial_output" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Test" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
