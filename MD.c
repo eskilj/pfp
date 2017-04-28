@@ -26,11 +26,13 @@ double force(double W, double delta, double r){
 }
 
 #define size 1.0
+#define get_k(i, j) (Npair - (Nbody-i)*((Nbody-i)-1)/2 + j - 1 - i)
 
 void evolve(int count, double dt) {
     int step;
     int i, j, k, l;
     double inner_mass, outer_mass, temp_force;
+
     /*
      * Loop over timesteps.
      */
@@ -42,6 +44,7 @@ void evolve(int count, double dt) {
          * add the wind term in the force calculation
          */
 
+        #pragma vector aligned
         for (i = 0; i < Nbody; i++) {
             /* calculate distance from central mass */
             r[i] = (pos[i][0]*pos[i][0]) + (pos[i][1]*pos[i][1]) + (pos[i][2]*pos[i][2]);
@@ -67,6 +70,7 @@ void evolve(int count, double dt) {
         }
 
         /* calculate norm of seperation vector */
+        #pragma vector aligned
         for (i = 0; i < Npair; i++) {
             delta_r[i] = (delta_pos[i][0]*delta_pos[i][0]) + (delta_pos[i][1]*delta_pos[i][1]) + (delta_pos[i][2]*delta_pos[i][2]);
             delta_r[i] = sqrt(delta_r[i]);
@@ -96,16 +100,18 @@ void evolve(int count, double dt) {
             }
         }
 
+
+
         /* update positions
          * update velocities
          * 4473061.sdb
          */
-
+        #pragma vector aligned
         for (i = 0; i < Nbody; i++) {
-            inner_mass = mass[i];
+            inner_mass = (1/(mass[i]));
             for (j = 0; j < Ndim; j++) {
                 pos[i][j] = pos[i][j] + dt * vel[i][j];
-                vel[i][j] = vel[i][j] + dt * (f[i][j] / inner_mass);
+                vel[i][j] = vel[i][j] + dt * (f[i][j]*inner_mass);
             }
         }
 

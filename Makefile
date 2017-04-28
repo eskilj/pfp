@@ -6,7 +6,7 @@ CFLAGS= -fast
 all: MD
 
 MD: $(OBJ)
-	$(CC) $(CFLAGS)  -o $@  $(OBJ) -opt-report5 -lm
+	$(CC) $(CFLAGS)  -o $@  $(OBJ) -opt-report3 -lm
 
 output.dat: MD input.dat
 	./MD

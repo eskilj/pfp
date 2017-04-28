@@ -27,14 +27,18 @@
 
 enum{ Xcoord=0, Ycoord, Zcoord};
       
-DEF double pos[Nbody][Ndim], vel[Nbody][Ndim];
-DEF double f[Nbody][Ndim], visc[Nbody], mass[Nbody], radius[Nbody];
-DEF double delta_pos[Npair][Ndim];
-DEF double r[Nbody];
+DEF double pos[Nbody][Ndim] __attribute__((aligned(64)));
+DEF double vel[Nbody][Ndim] __attribute__((aligned(64)));
+DEF double f[Nbody][Ndim] __attribute__((aligned(64)));
+DEF double visc[Nbody] __attribute__((aligned(64)));
+DEF double mass[Nbody] __attribute__((aligned(64)));
+DEF double radius[Nbody] __attribute__((aligned(64)));
+DEF double delta_pos[Npair][Ndim] __attribute__((aligned(64)));
+DEF double r[Nbody] __attribute__((aligned(64)));
 
-DEF double delta_r[Npair];
+DEF double delta_r[Npair] __attribute__((aligned(64)));
 
-DEF double wind[Ndim];
+DEF double wind[Ndim] __attribute__((aligned(64)));
 DEF int collisions;
 
 void evolve(int Nstep, double dt);
