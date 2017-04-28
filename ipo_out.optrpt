@@ -35,8 +35,8 @@ INLINE REPORT: (main) [1/7=14.3%] control.c(21,34)
     -> EXTERN: (92,9) gettimeofday
   -> INLINE: (58,17) second (isz = 9) (sz = 14)
     -> EXTERN: (92,9) gettimeofday
-  -> (59,9) evolve (isz = 381) (sz = 388)
-     [[ Inlining would exceed -inline-max-size value (388>230) <1>]]
+  -> (59,9) evolve (isz = 312) (sz = 319)
+     [[ Inlining would exceed -inline-max-size value (319>230) <1>]]
   -> INLINE: (60,16) second (isz = 9) (sz = 14)
     -> EXTERN: (92,9) gettimeofday
   -> EXTERN: (61,9) printf
@@ -75,12 +75,9 @@ Begin optimization report for: evolve
 INLINE REPORT: (evolve) [2/7=28.6%] MD.c(34,35)
   -> EXTERN: (42,9) printf
   -> EXTERN: (43,9) printf
-  -> INLINE: (54,13) wind_force (isz = 17) (sz = 28)
-  -> INLINE: (61,13) add_norm (isz = 21) (sz = 30)
-  -> INLINE: (70,27) force (isz = 3) (sz = 14)
+  -> INLINE: (74,27) force (isz = 3) (sz = 14)
     -> EXTERN: util.c:(26,19) pow
-  -> INLINE: (89,13) add_norm (isz = 21) (sz = 30)
-  -> INLINE: (105,34) force (isz = 3) (sz = 14)
+  -> INLINE: (113,34) force (isz = 3) (sz = 14)
     -> EXTERN: util.c:(26,19) pow
 
 
@@ -90,64 +87,31 @@ INLINE REPORT: (evolve) [2/7=28.6%] MD.c(34,35)
 LOOP BEGIN at MD.c(41,5)
    remark #15542: loop was not vectorized: inner loop was already vectorized
 
-   LOOP BEGIN at MD.c(46,9)
+   LOOP BEGIN at MD.c(49,9)
       remark #15542: loop was not vectorized: inner loop was already vectorized
 
-      LOOP BEGIN at MD.c(47,13)
-         remark #15388: vectorization support: reference f has aligned access   [ MD.c(48,21) ]
-         remark #15388: vectorization support: reference visc has aligned access   [ MD.c(48,21) ]
-         remark #15388: vectorization support: reference vel has aligned access   [ MD.c(48,21) ]
-         remark #15399: vectorization support: unroll factor set to 4
-         remark #15300: LOOP WAS VECTORIZED
-         remark #15448: unmasked aligned unit stride loads: 2 
-         remark #15449: unmasked aligned unit stride stores: 1 
-         remark #15475: --- begin vector loop cost summary ---
-         remark #15476: scalar loop cost: 7 
-         remark #15477: vector loop cost: 6.000 
-         remark #15478: estimated potential speedup: 4.660 
-         remark #15479: lightweight vector operations: 6 
-         remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=256
-      LOOP END
-   LOOP END
-
-   LOOP BEGIN at MD.c(53,9)
-      remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
-      remark #25452: Original Order found to be proper, but by a close margin
-      remark #25461: Imperfect Loop Unroll-Jammed by 2   (pre-vector) 
-      remark #15423: loop was not vectorized: has only one iteration
-
-      LOOP BEGIN at util.c(13,11) inlined into MD.c(54,13)
-         remark #15344: loop was not vectorized: vector dependence prevents vectorization
-         remark #15346: vector dependence: assumed OUTPUT dependence between f_602 line 14 and f_602 line 14
-         remark #15346: vector dependence: assumed OUTPUT dependence between f_602 line 14 and f_602 line 14
-         remark #25438: unrolled without remainder by 2  
-      LOOP END
-   LOOP END
-
-   LOOP BEGIN at MD.c(53,9)
-   <Remainder>
-      remark #15542: loop was not vectorized: inner loop was already vectorized
-
-      LOOP BEGIN at util.c(13,11) inlined into MD.c(54,13)
-         remark #15389: vectorization support: reference f_602 has unaligned access   [ util.c(14,13) ]
-         remark #15389: vectorization support: reference f_602 has unaligned access   [ util.c(14,13) ]
-         remark #15388: vectorization support: reference visc has aligned access   [ util.c(14,13) ]
+      LOOP BEGIN at MD.c(50,13)
+         remark #15389: vectorization support: reference f has unaligned access   [ MD.c(51,21) ]
+         remark #15389: vectorization support: reference vel has unaligned access   [ MD.c(51,21) ]
+         remark #15388: vectorization support: reference wind has aligned access   [ MD.c(51,21) ]
          remark #15381: vectorization support: unaligned access used inside loop body
-         remark #15399: vectorization support: unroll factor set to 4
          remark #15300: LOOP WAS VECTORIZED
          remark #15448: unmasked aligned unit stride loads: 1 
          remark #15450: unmasked unaligned unit stride loads: 1 
          remark #15451: unmasked unaligned unit stride stores: 1 
          remark #15475: --- begin vector loop cost summary ---
-         remark #15476: scalar loop cost: 11 
-         remark #15477: vector loop cost: 21.000 
-         remark #15478: estimated potential speedup: 2.090 
-         remark #15479: lightweight vector operations: 5 
-         remark #15480: medium-overhead vector operations: 1 
+         remark #15476: scalar loop cost: 13 
+         remark #15477: vector loop cost: 6.000 
+         remark #15478: estimated potential speedup: 1.110 
+         remark #15479: lightweight vector operations: 8 
          remark #15481: heavy-overhead vector operations: 1 
          remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=256
+         remark #25015: Estimate of max trip count of loop=1
+      LOOP END
+
+      LOOP BEGIN at MD.c(50,13)
+      <Remainder>
+         remark #25436: completely unrolled by 1  
       LOOP END
    LOOP END
 
@@ -156,65 +120,31 @@ LOOP BEGIN at MD.c(41,5)
       remark #15398: loop was not vectorized: loop was transformed to memset or memcpy
    LOOP END
 
-   LOOP BEGIN at MD.c(60,9)
-      remark #25461: Imperfect Loop Unroll-Jammed by 2   (pre-vector) 
-      remark #15542: loop was not vectorized: inner loop was already vectorized
+   LOOP BEGIN at MD.c(61,9)
+      remark #15541: outer loop was not auto-vectorized: consider using SIMD directive   [ MD.c(62,13) ]
+      remark #25456: Number of Array Refs Scalar Replaced In Loop: 3
 
-      LOOP BEGIN at util.c(20,9) inlined into MD.c(61,13)
-         remark #15388: vectorization support: reference r has aligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference r has aligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference r has aligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference r has aligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
+      LOOP BEGIN at MD.c(62,13)
+         remark #25085: Preprocess Loopnests: Moving Out Load and Store    [ MD.c(63,17) ]
+         remark #15389: vectorization support: reference pos has unaligned access   [ MD.c(63,17) ]
+         remark #15389: vectorization support: reference pos has unaligned access   [ MD.c(63,17) ]
          remark #15381: vectorization support: unaligned access used inside loop body
-         remark #15399: vectorization support: unroll factor set to 4
-         remark #15300: LOOP WAS VECTORIZED
-         remark #15448: unmasked aligned unit stride loads: 1 
-         remark #15449: unmasked aligned unit stride stores: 2 
-         remark #15450: unmasked unaligned unit stride loads: 2 
-         remark #15475: --- begin vector loop cost summary ---
-         remark #15476: scalar loop cost: 22 
-         remark #15477: vector loop cost: 26.000 
-         remark #15478: estimated potential speedup: 3.380 
-         remark #15479: lightweight vector operations: 13 
-         remark #15480: medium-overhead vector operations: 1 
-         remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=256
-      LOOP END
-   LOOP END
-
-   LOOP BEGIN at MD.c(60,9)
-   <Remainder>
-      remark #15542: loop was not vectorized: inner loop was already vectorized
-
-      LOOP BEGIN at util.c(20,9) inlined into MD.c(61,13)
-         remark #15388: vectorization support: reference r has aligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference r has aligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15381: vectorization support: unaligned access used inside loop body
-         remark #15399: vectorization support: unroll factor set to 4
-         remark #15300: LOOP WAS VECTORIZED
-         remark #15448: unmasked aligned unit stride loads: 1 
-         remark #15449: unmasked aligned unit stride stores: 1 
+         remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override 
          remark #15450: unmasked unaligned unit stride loads: 1 
          remark #15475: --- begin vector loop cost summary ---
-         remark #15476: scalar loop cost: 11 
-         remark #15477: vector loop cost: 13.000 
-         remark #15478: estimated potential speedup: 3.380 
+         remark #15476: scalar loop cost: 8 
+         remark #15477: vector loop cost: 4.000 
+         remark #15478: estimated potential speedup: 0.630 
          remark #15479: lightweight vector operations: 6 
          remark #15480: medium-overhead vector operations: 1 
          remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=256
+         remark #25436: completely unrolled by 3  
       LOOP END
    LOOP END
 
-   LOOP BEGIN at MD.c(63,9)
-      remark #15388: vectorization support: reference r has aligned access   [ MD.c(64,13) ]
-      remark #15388: vectorization support: reference r has aligned access   [ MD.c(64,13) ]
+   LOOP BEGIN at MD.c(67,9)
+      remark #15388: vectorization support: reference r has aligned access   [ MD.c(68,13) ]
+      remark #15388: vectorization support: reference r has aligned access   [ MD.c(68,13) ]
       remark #15399: vectorization support: unroll factor set to 4
       remark #15300: LOOP WAS VECTORIZED
       remark #15448: unmasked aligned unit stride loads: 1 
@@ -228,119 +158,86 @@ LOOP BEGIN at MD.c(41,5)
       remark #25015: Estimate of max trip count of loop=256
    LOOP END
 
-   LOOP BEGIN at MD.c(68,18)
-      remark #25444: Loopnest Interchanged: ( 1 2 ) --> ( 2 1 )
-      remark #15542: loop was not vectorized: inner loop was already vectorized   [ MD.c(68,18) ]
+   LOOP BEGIN at MD.c(71,9)
+      remark #15542: loop was not vectorized: inner loop was already vectorized
 
-      LOOP BEGIN at MD.c(67,9)
-         remark #15388: vectorization support: reference r has aligned access   [ util.c(26,19) ]
-         remark #15388: vectorization support: reference f has aligned access   [ MD.c(69,17) ]
-         remark #15388: vectorization support: reference f has aligned access   [ MD.c(69,17) ]
-         remark #15388: vectorization support: reference mass has aligned access   [ MD.c(69,17) ]
-         remark #15388: vectorization support: reference pos has aligned access   [ MD.c(69,17) ]
-         remark #15399: vectorization support: unroll factor set to 4
-         remark #15301: PERMUTED LOOP WAS VECTORIZED
-         remark #15448: unmasked aligned unit stride loads: 4 
-         remark #15449: unmasked aligned unit stride stores: 1 
+      LOOP BEGIN at MD.c(72,18)
+         remark #15389: vectorization support: reference f has unaligned access   [ MD.c(73,17) ]
+         remark #15389: vectorization support: reference f has unaligned access   [ MD.c(73,17) ]
+         remark #15389: vectorization support: reference pos has unaligned access   [ MD.c(73,17) ]
+         remark #15381: vectorization support: unaligned access used inside loop body
+         remark #15300: LOOP WAS VECTORIZED
+         remark #15450: unmasked unaligned unit stride loads: 2 
+         remark #15451: unmasked unaligned unit stride stores: 1 
          remark #15475: --- begin vector loop cost summary ---
          remark #15476: scalar loop cost: 49 
-         remark #15477: vector loop cost: 50.000 
-         remark #15478: estimated potential speedup: 3.910 
-         remark #15479: lightweight vector operations: 20 
+         remark #15477: vector loop cost: 26.000 
+         remark #15478: estimated potential speedup: 1.250 
+         remark #15479: lightweight vector operations: 17 
+         remark #15480: medium-overhead vector operations: 1 
          remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=256
+         remark #25015: Estimate of max trip count of loop=1
+      LOOP END
+
+      LOOP BEGIN at MD.c(72,18)
+      <Remainder>
+         remark #25436: completely unrolled by 1  
       LOOP END
    LOOP END
 
-   LOOP BEGIN at MD.c(75,9)
-      remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
-      remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation: ( 1 2 3 ) --> ( 3 1 2 ) 
+   LOOP BEGIN at MD.c(79,9)
       remark #15344: loop was not vectorized: vector dependence prevents vectorization
-      remark #15346: vector dependence: assumed OUTPUT dependence between delta_pos line 78 and delta_pos line 78
-      remark #15346: vector dependence: assumed OUTPUT dependence between delta_pos line 78 and delta_pos line 78
+      remark #15346: vector dependence: assumed OUTPUT dependence between delta_pos line 82 and delta_pos line 82
+      remark #15346: vector dependence: assumed OUTPUT dependence between delta_pos line 82 and delta_pos line 82
 
-      LOOP BEGIN at MD.c(76,13)
-         remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
-         remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation: ( 1 2 ) --> ( 2 1 ) 
+      LOOP BEGIN at MD.c(80,13)
          remark #15344: loop was not vectorized: vector dependence prevents vectorization
-         remark #15346: vector dependence: assumed FLOW dependence between k.734 line 80 and k.734 line 78
-         remark #15346: vector dependence: assumed ANTI dependence between k.734 line 78 and k.734 line 80
-         remark #15346: vector dependence: assumed ANTI dependence between k.734 line 78 and k.734 line 80
-         remark #15346: vector dependence: assumed FLOW dependence between k.734 line 80 and k.734 line 78
+         remark #15346: vector dependence: assumed FLOW dependence between k.734 line 84 and k.734 line 82
+         remark #15346: vector dependence: assumed ANTI dependence between k.734 line 82 and k.734 line 84
+         remark #15346: vector dependence: assumed ANTI dependence between k.734 line 82 and k.734 line 84
+         remark #15346: vector dependence: assumed FLOW dependence between k.734 line 84 and k.734 line 82
          remark #25439: unrolled with remainder by 2  
 
-         LOOP BEGIN at MD.c(77,17)
+         LOOP BEGIN at MD.c(81,17)
             remark #25436: completely unrolled by 3   (pre-vector) 
          LOOP END
       LOOP END
 
-      LOOP BEGIN at MD.c(76,13)
+      LOOP BEGIN at MD.c(80,13)
       <Remainder>
       LOOP END
    LOOP END
 
-   LOOP BEGIN at MD.c(85,9)
+   LOOP BEGIN at MD.c(89,9)
       remark #25408: memset generated
       remark #15398: loop was not vectorized: loop was transformed to memset or memcpy
    LOOP END
 
-   LOOP BEGIN at MD.c(88,9)
-      remark #25461: Imperfect Loop Unroll-Jammed by 2   (pre-vector) 
-      remark #15542: loop was not vectorized: inner loop was already vectorized
+   LOOP BEGIN at MD.c(93,9)
+      remark #15541: outer loop was not auto-vectorized: consider using SIMD directive   [ MD.c(94,13) ]
+      remark #25456: Number of Array Refs Scalar Replaced In Loop: 3
 
-      LOOP BEGIN at util.c(20,9) inlined into MD.c(89,13)
-         remark #15388: vectorization support: reference delta_r has aligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference delta_r has aligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference delta_r has aligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference delta_r has aligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
+      LOOP BEGIN at MD.c(94,13)
+         remark #25085: Preprocess Loopnests: Moving Out Load and Store    [ MD.c(95,17) ]
+         remark #15389: vectorization support: reference delta_pos has unaligned access   [ MD.c(95,17) ]
+         remark #15389: vectorization support: reference delta_pos has unaligned access   [ MD.c(95,17) ]
          remark #15381: vectorization support: unaligned access used inside loop body
-         remark #15300: LOOP WAS VECTORIZED
-         remark #15448: unmasked aligned unit stride loads: 1 
-         remark #15449: unmasked aligned unit stride stores: 2 
-         remark #15450: unmasked unaligned unit stride loads: 2 
-         remark #15475: --- begin vector loop cost summary ---
-         remark #15476: scalar loop cost: 22 
-         remark #15477: vector loop cost: 6.500 
-         remark #15478: estimated potential speedup: 3.380 
-         remark #15479: lightweight vector operations: 13 
-         remark #15480: medium-overhead vector operations: 1 
-         remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=2096640
-      LOOP END
-   LOOP END
-
-   LOOP BEGIN at MD.c(88,9)
-   <Remainder>
-      remark #15542: loop was not vectorized: inner loop was already vectorized
-
-      LOOP BEGIN at util.c(20,9) inlined into MD.c(89,13)
-         remark #15388: vectorization support: reference delta_r has aligned access   [ util.c(21,11) ]
-         remark #15388: vectorization support: reference delta_r has aligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15389: vectorization support: reference delta_604 has unaligned access   [ util.c(21,11) ]
-         remark #15381: vectorization support: unaligned access used inside loop body
-         remark #15300: LOOP WAS VECTORIZED
-         remark #15448: unmasked aligned unit stride loads: 1 
-         remark #15449: unmasked aligned unit stride stores: 1 
+         remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override 
          remark #15450: unmasked unaligned unit stride loads: 1 
          remark #15475: --- begin vector loop cost summary ---
-         remark #15476: scalar loop cost: 11 
-         remark #15477: vector loop cost: 3.250 
-         remark #15478: estimated potential speedup: 3.380 
+         remark #15476: scalar loop cost: 8 
+         remark #15477: vector loop cost: 4.000 
+         remark #15478: estimated potential speedup: 0.630 
          remark #15479: lightweight vector operations: 6 
          remark #15480: medium-overhead vector operations: 1 
          remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=2096640
+         remark #25436: completely unrolled by 3  
       LOOP END
    LOOP END
 
-   LOOP BEGIN at MD.c(91,9)
-      remark #15388: vectorization support: reference delta_r has aligned access   [ MD.c(92,13) ]
-      remark #15388: vectorization support: reference delta_r has aligned access   [ MD.c(92,13) ]
+   LOOP BEGIN at MD.c(99,9)
+      remark #15388: vectorization support: reference delta_r has aligned access   [ MD.c(100,13) ]
+      remark #15388: vectorization support: reference delta_r has aligned access   [ MD.c(100,13) ]
       remark #15300: LOOP WAS VECTORIZED
       remark #15448: unmasked aligned unit stride loads: 1 
       remark #15449: unmasked aligned unit stride stores: 1 
@@ -353,72 +250,50 @@ LOOP BEGIN at MD.c(41,5)
       remark #25015: Estimate of max trip count of loop=2096640
    LOOP END
 
-   LOOP BEGIN at MD.c(99,9)
+   LOOP BEGIN at MD.c(107,9)
       remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
-      remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation: ( 1 2 3 ) --> ( 3 2 1 ) 
+      remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation: ( 1 2 3 ) --> ( 2 1 3 ) 
       remark #15344: loop was not vectorized: vector dependence prevents vectorization
-      remark #15346: vector dependence: assumed OUTPUT dependence between f line 107 and f line 111
-      remark #15346: vector dependence: assumed OUTPUT dependence between f line 111 and f line 107
+      remark #15346: vector dependence: assumed OUTPUT dependence between f line 115 and f line 119
+      remark #15346: vector dependence: assumed OUTPUT dependence between f line 119 and f line 115
 
-      LOOP BEGIN at MD.c(101,13)
-         remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
-         remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation: ( 1 2 ) --> ( 2 1 ) 
+      LOOP BEGIN at MD.c(109,13)
          remark #15344: loop was not vectorized: vector dependence prevents vectorization
-         remark #15346: vector dependence: assumed OUTPUT dependence between f line 107 and f line 110
-         remark #15346: vector dependence: assumed OUTPUT dependence between f line 110 and f line 107
+         remark #15346: vector dependence: assumed OUTPUT dependence between f line 115 and f line 118
+         remark #15346: vector dependence: assumed OUTPUT dependence between f line 118 and f line 115
          remark #25015: Estimate of max trip count of loop=4096
 
-         LOOP BEGIN at MD.c(103,22)
+         LOOP BEGIN at MD.c(111,22)
             remark #25436: completely unrolled by 3   (pre-vector) 
          LOOP END
       LOOP END
    LOOP END
 
-   LOOP BEGIN at MD.c(121,13)
-   <Peeled>
-      remark #25444: Loopnest Interchanged: ( 1 2 ) --> ( 2 1 )
-      remark #25045: Fused Loops: ( 121 128 )
+   LOOP BEGIN at MD.c(131,9)
+      remark #15388: vectorization support: reference mass has aligned access   [ MD.c(132,13) ]
+      remark #15300: LOOP WAS VECTORIZED
+      remark #15448: unmasked aligned unit stride loads: 1 
+      remark #15460: masked strided loads: 12 
+      remark #15462: unmasked indexed (or gather) loads: 6 
+      remark #15475: --- begin vector loop cost summary ---
+      remark #15476: scalar loop cost: 143 
+      remark #15477: vector loop cost: 81.000 
+      remark #15478: estimated potential speedup: 1.760 
+      remark #15479: lightweight vector operations: 56 
+      remark #15480: medium-overhead vector operations: 1 
+      remark #15488: --- end vector loop cost summary ---
+      remark #25015: Estimate of max trip count of loop=1024
 
-      remark #15542: loop was not vectorized: inner loop was already vectorized   [ MD.c(121,13) ]
-
-      LOOP BEGIN at MD.c(120,9)
-      <Peeled>
-         remark #25045: Fused Loops: ( 120 127 )
-
-         remark #15388: vectorization support: reference pos has aligned access   [ MD.c(122,17) ]
-         remark #15388: vectorization support: reference pos has aligned access   [ MD.c(122,17) ]
-         remark #15388: vectorization support: reference vel has aligned access   [ MD.c(122,17) ]
-         remark #15388: vectorization support: reference vel has aligned access   [ MD.c(129,17) ]
-         remark #15388: vectorization support: reference vel has aligned access   [ MD.c(129,17) ]
-         remark #15388: vectorization support: reference mass has aligned access   [ MD.c(129,17) ]
-         remark #15388: vectorization support: reference f has aligned access   [ MD.c(129,17) ]
-         remark #15399: vectorization support: unroll factor set to 4
-         remark #15301: PERMUTED LOOP WAS VECTORIZED
-         remark #15448: unmasked aligned unit stride loads: 5 
-         remark #15449: unmasked aligned unit stride stores: 2 
-         remark #15475: --- begin vector loop cost summary ---
-         remark #15476: scalar loop cost: 47 
-         remark #15477: vector loop cost: 48.000 
-         remark #15478: estimated potential speedup: 3.910 
-         remark #15479: lightweight vector operations: 18 
-         remark #15488: --- end vector loop cost summary ---
-         remark #25015: Estimate of max trip count of loop=256
+      LOOP BEGIN at MD.c(133,13)
+         remark #25436: completely unrolled by 3   (pre-vector) 
       LOOP END
-
-      LOOP BEGIN at MD.c(127,9)
-      LOOP END
-   LOOP END
-
-   LOOP BEGIN at MD.c(127,9)
-      remark #25444: Loopnest Interchanged: ( 1 2 ) --> ( 2 1 )
-      remark #25046: Loop lost in Fusion 
    LOOP END
 LOOP END
 
     Report from: Code generation optimizations [cg]
 
 MD.c(58,13):remark #34026: call to memset implemented as a call to optimized library version
-MD.c(86,13):remark #34026: call to memset implemented as a call to optimized library version
+MD.c(90,13):remark #34026: call to memset implemented as a call to optimized library version
 ===========================================================================
 
 Begin optimization report for: force
@@ -426,6 +301,14 @@ Begin optimization report for: force
     Report from: Interprocedural optimizations [ipo]
 
 DEAD STATIC FUNCTION: (force) util.c(25,47)
+
+===========================================================================
+
+Begin optimization report for: second
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (second) control.c(87,17)
 
 ===========================================================================
 
@@ -442,14 +325,6 @@ Begin optimization report for: wind_force
     Report from: Interprocedural optimizations [ipo]
 
 DEAD STATIC FUNCTION: (wind_force) util.c(11,1)
-
-===========================================================================
-
-Begin optimization report for: second
-
-    Report from: Interprocedural optimizations [ipo]
-
-DEAD STATIC FUNCTION: (second) control.c(87,17)
 
 ===========================================================================
 

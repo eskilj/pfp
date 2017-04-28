@@ -124,17 +124,16 @@ void evolve(int count, double dt) {
             }
         }
 
-        /* update positions */
+        /* update positions
+         * update velocities
+         * 4473061.sdb
+         */
+
         for (i = 0; i < Nbody; i++) {
+            inner_mass = mass[i];
             for (j = 0; j < Ndim; j++) {
                 pos[i][j] = pos[i][j] + dt * vel[i][j];
-            }
-        }
-
-        /* update velocities */
-        for (i = 0; i < Nbody; i++) {
-            for (j = 0; j < Ndim; j++) {
-                vel[i][j] = vel[i][j] + dt * (f[i][j] / mass[i]);
+                vel[i][j] = vel[i][j] + dt * (f[i][j] / inner_mass);
             }
         }
 
