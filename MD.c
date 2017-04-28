@@ -46,34 +46,22 @@ void evolve(int count, double dt) {
          * add the wind term in the force calculation
          */
 
-        for (i = 0; i < Nbody; i++) {
-            for (j = 0; j < Ndim; j++) {
-                    f[i][j] = - visc[i]*vel[i][j] - visc[i]*wind[j];
-            }
-        }
-
-
         /* calculate distance from central mass */
         for (k = 0; k < Nbody; k++) {
             r[k] = 0.0;
         }
 
         for (i = 0; i < Nbody; i++) {
+            r[i] = (pos[i][0]*pos[i][0]) + (pos[i][1]*pos[i][1]) + (pos[i][2]*pos[i][2]);
+            r[i] = sqrt(r[i]);
+
+            /* calculate central force */
             for (j = 0; j < Ndim; j++) {
-                r[i] += pos[i][j]*pos[i][j];
+                f[i][j] = - visc[i]*vel[i][j] - visc[i]*wind[j] - force(G * mass[i] * M_central, pos[i][j], r[i]);
             }
         }
 
-        for (k = 0; k < Nbody; k++) {
-            r[k] = sqrt(r[k]);
-        }
-        /* calculate central force */
-        for (i = 0; i < Nbody; i++) {
-            for (j = 0; j < Ndim; j++) {
-                f[i][j] = f[i][j] -
-                          force(G * mass[i] * M_central, pos[i][j], r[i]);
-            }
-        }
+
         /* calculate pairwise separation of particles */
         k = 0;
         for (i = 0; i < Nbody; i++) {
