@@ -21,7 +21,9 @@
 #include <math.h>
 #include "coord.h"
 
-double force(double W, double delta, double r);
+double force(double W, double delta, double r){
+    return W*delta/(pow(r,3.0));
+}
 
 #define size 1.0
 
@@ -45,9 +47,10 @@ void evolve(int count, double dt) {
             r[i] = (pos[i][0]*pos[i][0]) + (pos[i][1]*pos[i][1]) + (pos[i][2]*pos[i][2]);
             r[i] = sqrt(r[i]);
 
+            temp_force = (G*mass[i]*M_central)/(pow(r[i], 3.0));
             /* calculate central force */
             for (j = 0; j < Ndim; j++) {
-                f[i][j] = -visc[i]*(vel[i][j] + wind[j]) - force(G * mass[i] * M_central, pos[i][j], r[i]);
+                f[i][j] = -visc[i]*(vel[i][j] + wind[j]) - (pos[i][j]*temp_force);
             }
         }
 

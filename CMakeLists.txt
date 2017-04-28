@@ -7,7 +7,6 @@ set(SOURCE_FILES
         control.c
         coord.h
         MD.c
-        util.c
         input.dat)
 
 add_executable(MD ${SOURCE_FILES})
