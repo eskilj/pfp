@@ -46,18 +46,14 @@ void evolve(int count, double dt) {
          * add the wind term in the force calculation
          */
 
-        /* calculate distance from central mass */
-        for (k = 0; k < Nbody; k++) {
-            r[k] = 0.0;
-        }
-
         for (i = 0; i < Nbody; i++) {
+            /* calculate distance from central mass */
             r[i] = (pos[i][0]*pos[i][0]) + (pos[i][1]*pos[i][1]) + (pos[i][2]*pos[i][2]);
             r[i] = sqrt(r[i]);
 
             /* calculate central force */
             for (j = 0; j < Ndim; j++) {
-                f[i][j] = - visc[i]*vel[i][j] - visc[i]*wind[j] - force(G * mass[i] * M_central, pos[i][j], r[i]);
+                f[i][j] = -visc[i]*(vel[i][j] + wind[j]) - force(G * mass[i] * M_central, pos[i][j], r[i]);
             }
         }
 
@@ -74,18 +70,9 @@ void evolve(int count, double dt) {
         }
 
         /* calculate norm of seperation vector */
-        for (k = 0; k < Npair; k++) {
-            delta_r[k] = 0.0;
-        }
-
         for (i = 0; i < Npair; i++) {
-            for (j = 0; j < Ndim; j++) {
-                delta_r[i] += delta_pos[i][j]*delta_pos[i][j];
-            }
-        }
-
-        for (k = 0; k < Npair; k++) {
-            delta_r[k] = sqrt(delta_r[k]);
+            delta_r[i] = (delta_pos[i][0]*delta_pos[i][0]) + (delta_pos[i][1]*delta_pos[i][1]) + (delta_pos[i][2]*delta_pos[i][2]);
+            delta_r[i] = sqrt(delta_r[i]);
         }
 
         /*
