@@ -44,8 +44,8 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < Nbody; i++) {
         fscanf(in, "%16le%16le%16le%16le%16le%16le%16le%16le%16le\n",
                mass + i, radius + i, visc + i,
-               &pos[i][Xcoord], &pos[i][Ycoord], &pos[i][Zcoord],
-               &vel[i][Xcoord], &vel[i][Ycoord], &vel[i][Zcoord]);
+               &pos[Xcoord][i], &pos[Ycoord][i], &pos[Zcoord][i],
+               &vel[Xcoord][i], &vel[Ycoord][i], &vel[Zcoord][i]);
     }
     fclose(in);
 
@@ -74,8 +74,8 @@ int main(int argc, char *argv[]) {
             fprintf(out,
                     "%16.8E%16.8E%16.8E%16.8E%16.8E%16.8E%16.8E%16.8E%16.8E\n",
                     mass[i], radius[i], visc[i],
-                    pos[i][Xcoord], pos[i][Ycoord], pos[i][Zcoord],
-                    vel[i][Xcoord], vel[i][Ycoord], vel[i][Zcoord]);
+                    pos[Xcoord][i], pos[Ycoord][i], pos[Zcoord][i],
+                    vel[Xcoord][i], vel[Ycoord][i], vel[Zcoord][i]);
         }
         fclose(out);
     }
