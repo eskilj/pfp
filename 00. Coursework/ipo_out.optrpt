@@ -1,0 +1,199 @@
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINING OPTION VALUES:
+  -inline-factor: 100
+  -inline-min-size: 30
+  -inline-max-size: 230
+  -inline-max-total-size: 2000
+  -inline-max-per-routine: disabled
+  -inline-max-per-compile: disabled
+
+
+Begin optimization report for: main
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (main) [1] control.c(21,34)
+  -> EXTERN: (37,10) fopen
+  -> EXTERN: (40,9) perror
+  -> EXTERN: (41,9) exit
+  -> EXTERN: (45,9) fscanf
+  -> EXTERN: (50,5) fclose
+  -> INLINE: (56,14) second
+    -> EXTERN: (92,9) gettimeofday
+  -> INLINE: (58,17) second
+    -> EXTERN: (92,9) gettimeofday
+  -> (59,9) evolve
+  -> INLINE: (60,16) second
+    -> EXTERN: (92,9) gettimeofday
+  -> EXTERN: (61,9) printf
+  -> EXTERN: (62,9) printf
+  -> EXTERN: (65,9) sprintf
+  -> EXTERN: (66,15) fopen
+  -> EXTERN: (69,13) perror
+  -> EXTERN: (70,13) exit
+  -> EXTERN: (74,13) fprintf
+  -> EXTERN: (80,9) fclose
+  -> INLINE: (82,13) second
+    -> EXTERN: (92,9) gettimeofday
+  -> EXTERN: (83,5) printf
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at control.c(44,5)
+   remark #15527: loop was not vectorized: function call to fscanf cannot be vectorized   [ control.c(45,9) ]
+LOOP END
+
+LOOP BEGIN at control.c(57,5)
+   remark #15520: loop was not vectorized: loop with early exits cannot be vectorized unless it meets search loop idiom criteria
+
+   LOOP BEGIN at control.c(73,9)
+      remark #15527: loop was not vectorized: function call to fprintf cannot be vectorized   [ control.c(74,13) ]
+   LOOP END
+LOOP END
+===========================================================================
+
+Begin optimization report for: evolve
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (evolve) [2] MD.c(31,35)
+  -> EXTERN: (40,9) printf
+  -> EXTERN: (41,9) printf
+  -> EXTERN: (53,49) pow
+  -> EXTERN: (90,34) pow
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at MD.c(39,5)
+   remark #15542: loop was not vectorized: inner loop was already vectorized
+
+   LOOP BEGIN at MD.c(48,9)
+      remark #15300: LOOP WAS VECTORIZED
+      remark #15448: unmasked aligned unit stride loads: 6 
+      remark #15449: unmasked aligned unit stride stores: 2 
+      remark #15460: masked strided loads: 12 
+      remark #15462: unmasked indexed (or gather) loads: 3 
+      remark #15475: --- begin vector loop cost summary ---
+      remark #15476: scalar loop cost: 148 
+      remark #15477: vector loop cost: 67.500 
+      remark #15478: estimated potential speedup: 2.190 
+      remark #15479: lightweight vector operations: 67 
+      remark #15480: medium-overhead vector operations: 1 
+      remark #15481: heavy-overhead vector operations: 1 
+      remark #15488: --- end vector loop cost summary ---
+      remark #25456: Number of Array Refs Scalar Replaced In Loop: 2
+      remark #25015: Estimate of max trip count of loop=1024
+
+      LOOP BEGIN at MD.c(55,13)
+         remark #25436: completely unrolled by 3   (pre-vector) 
+      LOOP END
+   LOOP END
+
+   LOOP BEGIN at MD.c(64,9)
+      remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+      remark #15346: vector dependence: assumed OUTPUT dependence between delta_pos line 67 and delta_pos line 67
+
+      LOOP BEGIN at MD.c(65,13)
+         remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+         remark #15346: vector dependence: assumed FLOW dependence between k.730 line 69 and k.730 line 67
+         remark #25439: unrolled with remainder by 2  
+
+         LOOP BEGIN at MD.c(66,17)
+            remark #25436: completely unrolled by 3   (pre-vector) 
+         LOOP END
+      LOOP END
+
+      LOOP BEGIN at MD.c(65,13)
+      <Remainder>
+      LOOP END
+   LOOP END
+
+   LOOP BEGIN at MD.c(75,9)
+      remark #15300: LOOP WAS VECTORIZED
+      remark #15448: unmasked aligned unit stride loads: 1 
+      remark #15449: unmasked aligned unit stride stores: 2 
+      remark #15460: masked strided loads: 6 
+      remark #15467: unmasked aligned streaming stores: 1 
+      remark #15475: --- begin vector loop cost summary ---
+      remark #15476: scalar loop cost: 60 
+      remark #15477: vector loop cost: 22.250 
+      remark #15478: estimated potential speedup: 2.690 
+      remark #15479: lightweight vector operations: 15 
+      remark #15480: medium-overhead vector operations: 1 
+      remark #15481: heavy-overhead vector operations: 1 
+      remark #15488: --- end vector loop cost summary ---
+      remark #25456: Number of Array Refs Scalar Replaced In Loop: 1
+      remark #25015: Estimate of max trip count of loop=2096640
+   LOOP END
+
+   LOOP BEGIN at MD.c(84,9)
+      remark #25096: Loop Interchange not done due to: Imperfect Loop Nest (Either at Source or due to other Compiler Transformations)
+      remark #25451: Advice: Loop Interchange, if possible, might help loopnest. Suggested Permutation: ( 1 2 3 ) --> ( 2 1 3 ) 
+      remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+      remark #15346: vector dependence: assumed OUTPUT dependence between f line 92 and f line 96
+
+      LOOP BEGIN at MD.c(86,13)
+         remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+         remark #15346: vector dependence: assumed OUTPUT dependence between f line 92 and f line 95
+         remark #25015: Estimate of max trip count of loop=4096
+
+         LOOP BEGIN at MD.c(88,17)
+            remark #25436: completely unrolled by 3   (pre-vector) 
+         LOOP END
+      LOOP END
+   LOOP END
+
+   LOOP BEGIN at MD.c(111,9)
+      remark #15300: LOOP WAS VECTORIZED
+      remark #15448: unmasked aligned unit stride loads: 1 
+      remark #15460: masked strided loads: 12 
+      remark #15462: unmasked indexed (or gather) loads: 6 
+      remark #15475: --- begin vector loop cost summary ---
+      remark #15476: scalar loop cost: 90 
+      remark #15477: vector loop cost: 65.000 
+      remark #15478: estimated potential speedup: 1.380 
+      remark #15479: lightweight vector operations: 53 
+      remark #15488: --- end vector loop cost summary ---
+      remark #25015: Estimate of max trip count of loop=1024
+
+      LOOP BEGIN at MD.c(113,13)
+         remark #25436: completely unrolled by 3   (pre-vector) 
+      LOOP END
+   LOOP END
+LOOP END
+===========================================================================
+
+Begin optimization report for: second
+
+    Report from: Interprocedural optimizations [ipo]
+
+DEAD STATIC FUNCTION: (second) control.c(87,17)
+
+===========================================================================
+
+    Report from: Profile guided optimizations [pgo]
+
+
+
+Profile feedback used a statically estimated profile for the following routines:
+
+  File: MD.c
+        evolve(31)
+
+  File: control.c
+        main(21)
+
+
+  0 out of 2 routine(s) used training profile data for PGO feedback
+  0 out of 2 routine(s) were unable to use training profile data for PGO feedback
+  0 out of 2 routine(s) were unable to find training profile data for PGO feedback
+  2 out of 2 routine(s) used a static estimate profile for PGO feedback
+
+
+

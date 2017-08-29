@@ -21,13 +21,10 @@
 #include <math.h>
 #include "coord.h"
 
-void visc_force(int N, double *f, double *visc, double *vel);
-
-void add_norm(int N, double *r, double *delta);
-
-double force(double W, double delta, double r);
-
-void wind_force(int N, double *f, double *visc, double vel);
+//double force(double W, double delta, double r){
+//    return W*delta/(pow(r,3.0));
+//}
+#define force(w, d, r) (w*d/(pow(r,3.0)))
 
 #define size 1.0
 
@@ -35,6 +32,7 @@ void evolve(int count, double dt) {
     int step;
     int i, j, k, l;
     double inner_mass, outer_mass, temp_force;
+
     /*
      * Loop over timesteps.
      */
@@ -46,58 +44,37 @@ void evolve(int count, double dt) {
          * add the wind term in the force calculation
          */
 
-        for (j = 0; j < Ndim; j++) {
-            for (i = 0; i < Nbody; i++) {
-                f[j][i] = -visc[i] * vel[j][i] - visc[i] * wind[j];
+        #pragma vector aligned
+        for (i = 0; i < Nbody; i++) {
+            /* calculate distance from central mass */
+            r[i] = (pos[i][0]*pos[i][0]) + (pos[i][1]*pos[i][1]) + (pos[i][2]*pos[i][2]);
+            r[i] = sqrt(r[i]);
+
+            temp_force = (G*mass[i]*M_central)/(pow(r[i], 3.0));
+            /* calculate central force */
+            for (j = 0; j < Ndim; j++) {
+                f[i][j] = -visc[i]*(vel[i][j] + wind[j]) - (pos[i][j]*temp_force);
             }
-        }
 
 
-        /* calculate distance from central mass */
-        for (k = 0; k < Nbody; k++) {
-            r[k] = 0.0;
         }
 
-        for (j = 0; j < Ndim; j++) {
-            for (i = 0; i < Nbody; i++) {
-                r[i] += pos[j][i] * pos[j][i];
-            }
-        }
-
-        for (k = 0; k < Nbody; k++) {
-            r[k] = sqrt(r[k]);
-        }
-        /* calculate central force */
-        for (j = 0; j < Ndim; j++) {
-            for (i = 0; i < Nbody; i++) {
-                f[j][i] = f[j][i] -
-                          force(G * mass[i] * M_central, pos[j][i], r[i]);
-            }
-        }
         /* calculate pairwise separation of particles */
         k = 0;
         for (i = 0; i < Nbody; i++) {
             for (j = i + 1; j < Nbody; j++) {
                 for (l = 0; l < Ndim; l++) {
-                    delta_pos[l][k] = pos[l][i] - pos[l][j];
+                    delta_pos[k][l] = pos[i][l] - pos[j][l];
                 }
                 k = k + 1;
             }
         }
 
         /* calculate norm of seperation vector */
-        for (k = 0; k < Npair; k++) {
-            delta_r[k] = 0.0;
-        }
-
-        for (j = 0; j < Ndim; j++) {
-            for (i = 0; i < Npair; i++) {
-                delta_r[i] += delta_pos[j][i] * delta_pos[j][i];
-            }
-        }
-
-        for (k = 0; k < Npair; k++) {
-            delta_r[k] = sqrt(delta_r[k]);
+        #pragma vector aligned
+        for (i = 0; i < Npair; i++) {
+            delta_r[i] = (delta_pos[i][0]*delta_pos[i][0]) + (delta_pos[i][1]*delta_pos[i][1]) + (delta_pos[i][2]*delta_pos[i][2]);
+            delta_r[i] = sqrt(delta_r[i]);
         }
 
         /*
@@ -105,19 +82,18 @@ void evolve(int count, double dt) {
          */
         k = 0;
         for (i = 0; i < Nbody; i++) {
-            outer_mass = G * mass[i];
+            outer_mass = G*mass[i];
             for (j = i + 1; j < Nbody; j++) {
                 inner_mass = outer_mass * mass[j];
                 for (l = 0; l < Ndim; l++) {
                     /*  flip force if close in */
-                    temp_force = force(inner_mass, delta_pos[l][k],
-                                       delta_r[k]);
+                    temp_force = force(inner_mass, delta_pos[k][l], delta_r[k]);
                     if (delta_r[k] >= size) {
-                        f[l][i] = f[l][i] - temp_force;
-                        f[l][j] = f[l][j] + temp_force;
+                        f[i][l] = f[i][l] - temp_force;
+                        f[j][l] = f[j][l] + temp_force;
                     } else {
-                        f[l][i] = f[l][i] + temp_force;
-                        f[l][j] = f[l][j] - temp_force;
+                        f[i][l] = f[i][l] + temp_force;
+                        f[j][l] = f[j][l] - temp_force;
                         collisions++;
                     }
                 }
@@ -125,17 +101,18 @@ void evolve(int count, double dt) {
             }
         }
 
-        /* update positions */
-        for (j = 0; j < Ndim; j++) {
-            for (i = 0; i < Nbody; i++) {
-                pos[j][i] = pos[j][i] + dt * vel[j][i];
-            }
-        }
 
-        /* update velocities */
-        for (j = 0; j < Ndim; j++) {
-            for (i = 0; i < Nbody; i++) {
-                vel[j][i] = vel[j][i] + dt * (f[j][i] / mass[i]);
+
+        /* update positions
+         * update velocities
+         * 4473061.sdb
+         */
+        #pragma vector aligned
+        for (i = 0; i < Nbody; i++) {
+            inner_mass = (1/(mass[i]));
+            for (j = 0; j < Ndim; j++) {
+                pos[i][j] = pos[i][j] + dt * vel[i][j];
+                vel[i][j] = vel[i][j] + dt * (f[i][j]*inner_mass);
             }
         }
 
