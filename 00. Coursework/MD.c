@@ -21,12 +21,12 @@
 #include <math.h>
 #include "coord.h"
 
-double force(double W, double delta, double r){
-    return W*delta/(pow(r,3.0));
-}
+//double force(double W, double delta, double r){
+//    return W*delta/(pow(r,3.0));
+//}
+#define force(w, d, r) (w*d/(pow(r,3.0)))
 
 #define size 1.0
-#define get_k(i, j) (Npair - (Nbody-i)*((Nbody-i)-1)/2 + j - 1 - i)
 
 void evolve(int count, double dt) {
     int step;
@@ -55,8 +55,9 @@ void evolve(int count, double dt) {
             for (j = 0; j < Ndim; j++) {
                 f[i][j] = -visc[i]*(vel[i][j] + wind[j]) - (pos[i][j]*temp_force);
             }
-        }
 
+
+        }
 
         /* calculate pairwise separation of particles */
         k = 0;
